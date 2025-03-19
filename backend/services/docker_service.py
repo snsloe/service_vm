@@ -6,7 +6,6 @@ import uuid
 
 
 def create_container(os_type: str, cpu_cores: int, ram_gb: int, disk_gb: int, ssh_key: str) -> str:
-    """Создаёт Docker-контейнер через CLI"""
     try:
         print("DEBUG: Создание контейнера через Docker CLI...")
         
@@ -16,7 +15,7 @@ def create_container(os_type: str, cpu_cores: int, ram_gb: int, disk_gb: int, ss
             "CentOS 8": "centos:8"
         }.get(os_type, os_type.lower().replace(' ', '_') + ":latest")
 
-        # Формируем корректное имя контейнера
+
         container_name = f"{os_type.lower().replace(' ', '_')}_container_{uuid.uuid4().hex[:8]}"
 
         # Проверяем, есть ли образ, если нет — загружаем
@@ -53,7 +52,7 @@ def create_container(os_type: str, cpu_cores: int, ram_gb: int, disk_gb: int, ss
 import docker
 
 def get_active_containers():
-    """Возвращает список запущенных контейнеров"""
+
     try:
         client = docker.DockerClient(base_url="unix:///var/run/docker.sock")
         containers = client.containers.list()
