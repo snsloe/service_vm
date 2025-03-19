@@ -1,0 +1,29 @@
+services:
+  frontend:
+    image: streamlit_app
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+
+
+  backend:
+    image: fastapi_app
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/db:/app/db
+      - /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock
+      - /var/run/libvirt/virtlogd-sock:/var/run/libvirt/virtlogd-sock
+      - /var/lib/libvirt/images:/var/lib/libvirt/images
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/libvirt/boot:/var/lib/libvirt/boot
+    
+  
+    environment:
+        DOCKER_HOST: "unix:///var/run/docker.sock"
+
+    privileged: true
+
