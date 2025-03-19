@@ -1,0 +1,5 @@
+fastapi==0.95.2
+uvicorn==0.22.0
+libvirt-python==9.0.0
+docker==6.1.2
+apscheduler==3.10.1
