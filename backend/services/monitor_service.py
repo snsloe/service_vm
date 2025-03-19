@@ -10,16 +10,9 @@ from apscheduler.triggers.date import DateTrigger
 import pytz
 
 
-
-
-MAX_RUNTIME_VM = 300  
-MAX_RUNTIME_CONTAINER = 300
-
-
 def get_vm_start_time(domain):
     try:
         state, max_mem, mem, vcpus, cputime = domain.info()
-        # cputime — это общее время работы в наносекундах
         start_time = datetime.utcnow() - timedelta(microseconds=cputime / 1000)
         return start_time
     except Exception as e:
@@ -39,7 +32,7 @@ def stop_vm(uuid):
         print("Ошибка при остановке ВМ:", e)
     finally:
         if conn:
-            conn.close()  # Закрываем соединение
+            conn.close()  
 
 def stop_container(container_id):
     try:
@@ -52,7 +45,7 @@ def stop_container(container_id):
 
 
 def get_vm_start_time(domain):
-    """Получает время запуска ВМ из XML-конфигурации"""
+
     try:
         xml_desc = domain.XMLDesc(0)
         root = ET.fromstring(xml_desc)
@@ -72,7 +65,6 @@ def schedule_shutdown(resource_type, resource_id, shutdown_delay):
 
 
 def check_resources():
-    """Проверяет запущенные ресурсы и завершает их по условиям"""
     print("Запуск проверки ресурсов...")
 
     try:
@@ -98,7 +90,7 @@ def check_resources():
                     continue
 
                 started_at = datetime.strptime(started_at_str[:-4], "%Y-%m-%dT%H:%M:%S.%f")
-                started_at = started_at.replace(tzinfo=pytz.UTC)  # Добавляем временную зону UTC
+                started_at = started_at.replace(tzinfo=pytz.UTC)  
                 uptime = (datetime.utcnow().replace(tzinfo=pytz.UTC) - started_at).total_seconds()
 
                 if uptime > MAX_RUNTIME_CONTAINER:
@@ -117,7 +109,7 @@ scheduler.start()
 
 moscow_tz = pytz.timezone("Europe/Moscow")
 
-shutdown_time = datetime.now(moscow_tz) + timedelta(minutes=10)  # Пример: выключение через 10 минут
+#shutdown_time = datetime.now(moscow_tz) + timedelta(minutes=10) 
 
 scheduler.add_job(stop_vm, trigger=DateTrigger(run_date=shutdown_time, timezone=moscow_tz), args=[vm_uuid])
 
