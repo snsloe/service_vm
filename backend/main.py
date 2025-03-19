@@ -12,7 +12,6 @@ print("Текущее время Python:", time.strftime("%Y-%m-%d %H:%M:%S %Z")
 
 import os
 
-# Принудительно задаём временную зону для Python
 os.environ['TZ'] = 'Europe/Moscow'
 time.tzset()
 
