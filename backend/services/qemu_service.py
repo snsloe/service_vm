@@ -7,7 +7,7 @@ import datetime
 
 
 def create_vm(os_type: str, cpu_cores: int, ram_gb: int, disk_gb: int, ssh_key: str) -> str:
-    """Создаёт виртуальную машину с выбранной ОС"""
+
     try:
         conn = libvirt.open("qemu:///system")
         if conn is None:
